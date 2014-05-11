@@ -25,3 +25,6 @@ clean: uninstall
 
 full-clean: clean
 	$(call ssh_all,'sudo docker rmi deis/logger')
+
+test:
+	go test -v ./...
