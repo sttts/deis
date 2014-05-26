@@ -20,7 +20,7 @@ namespace :setup do
 end
 
 namespace :tests do
-  task :all => ['register','login','add_key','create_cluster','create_app','push_app','scale_app','verify_app']
+  task :all => ['register','login','add_key','create_cluster','create_app','push_app','scale_app','verify_app','set_config','verify_config','pull_config','verify_config_pull']
   task :register do
     run_command("deis register http://#{HOSTNAME}:8000 --username=test --email=test@test.co.nz --password=asdf1234 || true")
   end
@@ -51,6 +51,24 @@ namespace :tests do
   end
   task :verify_app do
     run_command("curl -s http://testing.#{HOSTNAME} | grep -q 'Powered by Deis'")
+  end
+  task :set_config do
+    Dir.chdir(EXAMPLE_APP) do
+      run_command("deis config:set POWERED_BY=love")
+    end
+  end
+  task :verify_config do
+    run_command("curl -s http://testing.#{HOSTNAME} | grep -q 'Powered by love'")
+  end
+  task :pull_config do
+    Dir.chdir(EXAMPLE_APP) do
+      run_command("deis config:pull")
+    end
+  end
+  task :verify_config_pull do
+    Dir.chdir(EXAMPLE_APP) do
+      run_command("cat .env | grep -q 'POWERED_BY'")
+    end
   end
 end
 
