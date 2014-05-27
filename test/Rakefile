@@ -73,7 +73,7 @@ namespace :tests do
 end
 
 namespace :cleanup do
-  task :all => ['destroy_app','destroy_cluster','remove_key','logout']
+  task :all => ['destroy_app','destroy_cluster','remove_key','logout','remove_env']
   task :destroy_app do
     Dir.chdir(EXAMPLE_APP) do
       run_command('deis apps:destroy --app=testing --confirm=testing')
@@ -87,6 +87,11 @@ namespace :cleanup do
   end
   task :logout do
     run_command("deis auth:logout")
+  end
+  task :remove_env do
+    Dir.chdir(EXAMPLE_APP) do
+      run_command("rm .env")
+    end
   end
 end
 
