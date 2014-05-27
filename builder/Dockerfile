@@ -1,6 +1,11 @@
 FROM deis/base:latest
 MAINTAINER Gabriel Monroy <gabriel@opdemand.com>
 
+# HACK: import progrium/cedarish as a tarball
+# see https://github.com/deis/deis/issues/1027
+RUN wget -O /progrium_cedarish.tar --progress=dot:giga \
+        https://s3-us-west-2.amazonaws.com/opdemand/progrium_cedarish_2014.05.27.tar
+
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update
