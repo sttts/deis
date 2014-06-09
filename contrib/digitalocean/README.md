@@ -1,9 +1,36 @@
-Deis on DigitalOcean
-====================
+How to Provision a Deis Controller on Digital Ocean
+===================================================
 
-Unfortunately, DigitalOcean does not yet provide CoreOS images. This
-prevents Deis from being deployed on DigitalOcean.
+Here are the steps to get started on Digital Ocean:
 
-If you use DigitalOcean, please
-[show your support](http://digitalocean.uservoice.com/forums/136585-digital-ocean/suggestions/4250154-suport-coreos-as-a-deployment-platform)
-for CoreOS and help us to support Deis on DO.
+* Get a etcd discovery URL at https://discovery.etcd.io/new and enter it in
+  ../coreos/user-data
+
+* Install DO command line client and authorize:
+
+```
+gem install tugboat
+tugboat authorize
+```
+You can leave all but the client and API keys as the defaults.
+
+* Find out about the ID of your ssh key (import it into DO if it's not listed):
+
+```
+tugboat keys
+```
+
+* Create a controller image:
+
+```
+./provision-digitalocean-controller-image.sh <YOU SSH KEY ID>
+```
+
+* Deploy controllers (odd number) using the newly created image, either via UI
+  or tugboat:
+
+```
+tugboat create deis1 -r <REGION_ID> -i <IMAGE_ID> -p true -k <SSH_ID> -s 66
+```
+
+* Not all regions allow private networks. Better choose one which does.
